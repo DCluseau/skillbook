@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>Goodsprings' neighbourhood</title>
+        <!-- STYLES -->
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <!-- /STYLES -->
+    </head>
+    <body>
+        <nav class="navbar navbar-default">
+            <div class="banner">
+                <img src="{% static 'skillbook:images/logo.png'}" alt="Logo Goodsprings' neighbourhood" />
+                <h1 class="h1">GOODSPRINGS' NEIGHBOURHOOD</h1>
+                <h2 class="h2">We won't let the raiders get to you</h2>
+            </div>
+            <div class="container-fluid"></div>
+                <ul class="nav navbar-nav">
+                    <li>Accueil</li>
+                    {% if user.is_authenticated %}
+                        <li>Chercher un service</li>
+                        <li>Liste des compétences</li>
+                        <li>Editer mon profil</li>
+                        <li>Déconnexion</li>
+                    {% else %}
+                        <li>Connexion</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+
+        <main>
+        {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+    </main>
+    </body>
+    <footer class="footer">
+        <small>Goodsprings' neighbourhood — Django assessment - Daphné - CDA Java/Python Training - FMS © 2026</small>
+        <a href="#">Admin</a>
+    </footer>
+</html>

@@ -2,7 +2,9 @@ from datetime import date
 
 from django.db import models
 from django.contrib.auth.models import User
-from typing import Any
+from typing import Any, Optional
+
+from django.forms import ValidationError
 
 class Skill(models.model):
     name = models.CharField(max_length=200)
@@ -33,10 +35,15 @@ class Slot(models.Model):
     
     def save(self, *args: Any, **kwargs: Any) -> None:
             """
-            Surcharge du save pour sécuriser l'enregistrement.
+            Save method override to secure the data saving
             """
             self.full_clean()
             super().save(*args, **kwargs)
+    
+    def clean(self):
+        # Check if the selected date does not precede today's date
+        if self.slot_date < date.today:
+              raise ValidationError("La date du créneau ne peut pas être antérieure à la date d'aujourd'hui.")
 
 class Booking(models.Model):
     slot = models.ForeignKey(Slot, on_delete=models.CASCADE)
@@ -46,9 +53,19 @@ class Booking(models.Model):
     def __str__(self):
         return f"{self.slot} - {self.booker_user} - {self.is_booked}"
     
+    def clean(self):
+        # Check if the slot is being modified elsewhere
+        # If so, raise an error
+        if self.pk:
+            conflicts = conflicts.exclude(pk=self.pk)
+            if conflicts.exists():
+                conflict: Optional[Booking] = conflicts.first()
+                if conflict:
+                     raise ValidationError(
+                          f"Ce créneau est déjà réservé."
+                     )
+                
     def save(self, *args: Any, **kwargs: Any) -> None:
-            """
-            Surcharge du save pour sécuriser l'enregistrement.
-            """
+            # Save method override to secure the data saving
             self.full_clean()
             super().save(*args, **kwargs)

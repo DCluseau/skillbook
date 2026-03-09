@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>30</x>
+      <y>60</y>
+      <w>960</w>
+      <h>540</h>
+    </coordinates>
+    <panel_attributes>
+
+Title
+
+
+--
+
+Menu
+
+halign=center
+--
+
+Search
+
+--
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--
+
+Footer</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>30</x>
+      <y>60</y>
+      <w>100</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Logo
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>890</x>
+      <y>60</y>
+      <w>100</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Login</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>240</x>
+      <y>260</y>
+      <w>550</w>
+      <h>290</h>
+    </coordinates>
+    <panel_attributes>Available slots
+--
+Name (if connected) / Anonymous
+Skills
+Dates
+
+--
+Name (if connected) / Anonymous
+Skills
+Dates
+
+--
+Name (if connected) / Anonymous
+Skills
+Dates
+
+--
+Name (if connected) / Anonymous
+Skills
+Dates</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>640</x>
+      <y>290</y>
+      <w>140</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Book
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>640</x>
+      <y>360</y>
+      <w>140</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Book
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>640</x>
+      <y>430</y>
+      <w>140</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Book
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>640</x>
+      <y>490</y>
+      <w>140</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Book
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

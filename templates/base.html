@@ -25,12 +25,12 @@
                 <ul class="nav navbar-nav">
                     <li>Accueil</li>
                     {% if user.is_authenticated %}
-                        <li>Chercher un service</li>
-                        <li>Liste des compétences</li>
-                        <li>Editer mon profil</li>
-                        <li>Déconnexion</li>
+                        <li><a href="#">Chercher un service</a></li>
+                        <li><a href="#"></a>Liste des compétences</a></li>
+                        <li><a href="#"></a>Editer mon profil</a></li>
+                        <li><a href="#"></a>Déconnexion</a></li>
                     {% else %}
-                        <li>Connexion</li>
+                        <li><a href="#"></a>Connexion</a></li>
                     {% endif %}
                 </ul>
             </div>

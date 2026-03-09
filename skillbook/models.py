@@ -2,7 +2,7 @@ from datetime import date
 
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
+from typing import Any
 
 class Skill(models.model):
     name = models.CharField(max_length=200)
@@ -30,6 +30,13 @@ class Slot(models.Model):
 
     def __str__(self):
         return f"{self.user_skill} - {self.slot_date}"
+    
+    def save(self, *args: Any, **kwargs: Any) -> None:
+            """
+            Surcharge du save pour sécuriser l'enregistrement.
+            """
+            self.full_clean()
+            super().save(*args, **kwargs)
 
 class Booking(models.Model):
     slot = models.ForeignKey(Slot, on_delete=models.CASCADE)
@@ -38,3 +45,10 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.slot} - {self.booker_user} - {self.is_booked}"
+    
+    def save(self, *args: Any, **kwargs: Any) -> None:
+            """
+            Surcharge du save pour sécuriser l'enregistrement.
+            """
+            self.full_clean()
+            super().save(*args, **kwargs)

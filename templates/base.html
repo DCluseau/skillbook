@@ -22,9 +22,9 @@
                 <a class="navbar-brand" href="#">GOODSPRINGS' NEIGHBOURHOOD</a>
             </div>
             <ul class="nav navbar-nav navbar-center">
-                <li><a href="#">Home</a></li>
+                <li><a href="{% url 'skillbook:booked_list' %}">Home</a></li>
                 {% if user.is_authenticated %}
-                <li><a href="#">Search for a service</a></li>
+                <li><a href="{% url 'skillbook:slot_list' %}">Search for a service</a></li>
                 <li><a href="#">Skills list</a></li>
                 <li><a href="#">Manage profile</a></li>
                 {% endif %}

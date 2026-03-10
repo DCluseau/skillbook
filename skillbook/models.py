@@ -56,15 +56,22 @@ class Booking(models.Model):
     def clean(self):
         # Check if the slot is being modified elsewhere
         # If so, raise an error
-        if self.pk:
-            conflicts = conflicts.exclude(pk=self.pk)
+        conflicts = Booking.objects.filter(
+                slot=self.slot,
+                booker_user=self.booker_user,  # Qui commencent avant que j'aie fini
+                is_booked=self.is_booked,  # Et qui finissent après que j'aie commencé
+            )
+        if self.is_booked and self.booker_user == self.slot.user_skill.user.username:
+             raise ValidationError("You can't book yourself.")
+        if self.is_booked and self.booker_user != self.slot.user_skill.user.username:
+            if self.pk:
+                conflicts = conflicts.exclude(pk=self.pk)
             if conflicts.exists():
                 conflict: Optional[Booking] = conflicts.first()
                 if conflict:
-                     raise ValidationError(
-                          f"Ce créneau est déjà réservé."
-                     )
-                
+                    raise ValidationError(
+                        f"Ce créneau est déjà réservé."
+                    )
     def save(self, *args: Any, **kwargs: Any) -> None:
             # Save method override to secure the data saving
             self.full_clean()

@@ -12,19 +12,19 @@ class Skill(models.Model):
     def __str__(self):
         return self.name
 
-class UserData(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    email = models.CharField(max_length=200)
+# class UserData(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     email = models.CharField(max_length=200)
     
-    def __str__(self):
-        return f"{self.user} - {self.email}"
+#     def __str__(self):
+#         return f"{self.user} - {self.email}"
 
 class UserSkill(models.Model):
-    user = models.ForeignKey(UserData, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
     
     def __str__(self):
-        return f"{self.user} - {self.skill}"
+        return f"{self.user.username} - {self.skill}"
 
 class Slot(models.Model):
     user_skill = models.ForeignKey(UserSkill, on_delete=models.CASCADE)
@@ -47,7 +47,7 @@ class Slot(models.Model):
 
 class Booking(models.Model):
     slot = models.ForeignKey(Slot, on_delete=models.CASCADE)
-    booker_user = models.ForeignKey(UserData, on_delete=models.CASCADE, default=0)
+    booker_user = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
     is_booked = models.BooleanField(default=False)
 
     def __str__(self):

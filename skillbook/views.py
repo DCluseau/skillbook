@@ -8,5 +8,5 @@ from skillbook.models import Booking
 def list_booked_slots(request: HttpRequest) -> HttpResponse:
     """ Vue : index / booked_list
     Affiche la liste des ressources prêtes à être 'bouquées'. """
-    bookings = Booking.objects.all()
+    bookings = Booking.objects.filter(is_booked=True)
     return render(request, 'skillbook/booked_list.html', {'bookings': bookings})

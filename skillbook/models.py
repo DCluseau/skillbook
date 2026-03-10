@@ -6,7 +6,7 @@ from typing import Any, Optional
 
 from django.forms import ValidationError
 
-class Skill(models.model):
+class Skill(models.Model):
     name = models.CharField(max_length=200)
 
     def __str__(self):

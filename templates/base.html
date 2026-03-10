@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>Goodsprings' neighbourhood</title>
+        <!-- STYLES -->
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <!-- /STYLES -->
+    </head>
+    <body>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header col-sm-4">
+                    <img src="{% static 'images/logo.png' %}" class="img-rounded img-responsive" width="100px" style="float:left;" alt="Logo Goodsprings' neighbourhood" />
+                    <a class="navbar-brand" href="#">GOODSPRINGS' NEIGHBOURHOOD</a>
+                </div>
+                <ul class="nav nav-pills">
+                    <li class="active"><a href="#">Home</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="#">Search for a service</a></li>
+                    <li><a href="#">Skills list</a></li>
+                    <li><a href="#">Manage profile</a></li>
+                    <li><a href="#">Logout</a></li>
+                    {% else %}
+                    <li><a href="#">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+        <main>
+        {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+    </main>
+    </body>
+    <footer class="footer">
+        <small>Goodsprings' neighbourhood — Django assessment - Daphné - CDA Java/Python Training - FMS © 2026</small>
+        <a href="#">Admin</a>
+    </footer>
+</html>

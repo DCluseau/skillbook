@@ -42,7 +42,7 @@ class Slot(models.Model):
     
     def clean(self):
         # Check if the selected date does not precede today's date
-        if self.slot_date < date.today:
+        if self.slot_date < date.today():
               raise ValidationError("La date du créneau ne peut pas être antérieure à la date d'aujourd'hui.")
 
 class Booking(models.Model):

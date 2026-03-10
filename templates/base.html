@@ -1,61 +1,75 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <title>Goodsprings' neighbourhood</title>
-        <!-- STYLES -->
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-        <!-- jQuery library -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
-        <!-- Latest compiled JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <!-- /STYLES -->
-    </head>
-    <body>
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-                <div class="navbar-header col-sm-4">
-                    <img src="{% static 'images/logo.png' %}" class="img-rounded img-responsive" width="100px" style="float:left;" alt="Logo Goodsprings' neighbourhood" />
-                    <a class="navbar-brand" href="#">GOODSPRINGS' NEIGHBOURHOOD</a>
-                </div>
-                <ul class="nav navbar-nav">
-                    <li><a href="#">Home</a></li>
-                    {% if user.is_authenticated %}
-                    <li><a href="#">Search for a service</a></li>
-                    <li><a href="#">Skills list</a></li>
-                    <li><a href="#">Manage profile</a></li>
-                    <li><a href="#">Logout</a></li>
-                    {% else %}
-                    <li><a href="#">Login</a></li>
-                    {% endif %}
-                </ul>
+<head>
+    <title>Goodsprings' neighbourhood</title>
+    <!-- STYLES -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <!-- /STYLES -->
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header col-sm-4">
+                <img src="{% static 'images/logo.png' %}" class="img-rounded img-responsive" width="100px" style="float:left;" alt="Logo Goodsprings' neighbourhood" />
+                <a class="navbar-brand" href="#">GOODSPRINGS' NEIGHBOURHOOD</a>
             </div>
-        </nav>
-        <main class="container-fluid">
+            <ul class="nav navbar-nav navbar-center">
+                <li><a href="{% url 'skillbook:booked_list' %}">Home</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'skillbook:slot_list' %}">Search for a service</a></li>
+                <li><a href="#">Skills list</a></li>
+                <li><a href="#">Manage profile</a></li>
+                {% endif %}
+            </ul>
+            <ul class="nav navbar-nav navbar-center">
+                {% if user.is_authenticated %}
+                <li>
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-primary">Logout</button>
+                    </form>
+                </li>
+                {% else %}
+                <li>
+                    <form action="{% url 'login' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-primary">Login</button>
+                    </form>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <main class="container-fluid">
         {% if messages %}
-            <div class="messages-container">
-                {% for message in messages %}
-                    <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
+        <div class="messages-container">
+            {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">
+                {{ message }}
             </div>
+            {% endfor %}
+        </div>
         {% endif %}
         {% block content %}
         {% endblock %}
     </main>
-    </body>
-    <footer class=" mt-auto py-3 border-top">
-        <div class="text-center p-3">
-    Goodsprings' neighbourhood — Django assessment - Daphné - CDA Java/Python Training - FMS © 2026
+</body>
+<footer class=" mt-auto py-3 border-top">
+    <div class="text-center p-3">
+        Goodsprings' neighbourhood — Django assessment - Daphné - CDA Java/Python Training - FMS © 2026
     </div>
     <div class="border-top text-center p-3">
-        <a href="#">Admin</a>
+        <a href="{% url 'admin:index' %}">Admin</a>
     </div>
-        
-          
-    </footer>
+    
+    
+</footer>
 </html>

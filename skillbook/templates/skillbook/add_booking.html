@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<p>Confirmez-vous la réservation ?</p>
+<form method="post" action="{% url 'skillbook:add_booking' booking.id %}">
+    <button type="submit">OK</button>
+    <a href="{% url 'skillbook:slot_list' %}" class="btn btn-danger">Cancel</a>
+</form>
+{% endblock %}

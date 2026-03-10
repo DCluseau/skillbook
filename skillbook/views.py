@@ -19,17 +19,8 @@ def list_booked_slots(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def get_my_bookings(request: HttpRequest) -> HttpResponse:
-    """ Vue : booked_list
-    Récupère uniquement les réservations du 'bouc' connecté. """
-    user_bookings = Booking.objects.filter(user=request.user).order_by('-slot_date')
-    return render(request, 'skillbook/booked_list.html', {'bookings': user_bookings})
-
-@login_required
-def get_my_slots(request: HttpRequest) -> HttpResponse:
-    """ Vue : my_slots_list
-    Récupère uniquement les réservations du 'bouc' connecté. """
-    user_slots = Slot.objects.filter(user=request.user).order_by('-slot_date')
-    return render(request, 'skillbook/my_slots_list.html', {'slots': user_slots})
+    user_bookings = Booking.objects.filter(booker_user=request.user)
+    return render(request, 'skillbook/my_bookings_list.html', {'bookings': user_bookings})
 
 @login_required
 def get_bookings(request: HttpRequest) -> HttpResponse:
@@ -46,6 +37,34 @@ def add_booking(request: HttpRequest, booking_id: int) -> HttpResponse:
             booking.booker_user = request.user
 
             # booking.full_clean()
+            booking.save()
+
+            messages.success(request, "Booking successful !")
+        except Exception as e:
+            list_msg: list[str] = []
+
+            if isinstance(e, ValidationError):
+                if hasattr(e, 'message_dict') and e.message_dict:
+                    dict_err: dict[str, list[str]] = e.message_dict
+                    for msgs in dict_err.values():
+                        list_msg.extend(msgs)
+                elif hasattr(e, 'messages'):
+                    list_msg.extend(e.messages)
+            if list_msg:
+                messages.error(request, " | ".join(list_msg))
+            else:
+                messages.error(request, str(e))
+    return redirect('skillbook:slot_list')
+
+@login_required
+def cancel_booking(request: HttpRequest, booking_id: int) -> HttpResponse:
+    booking = get_object_or_404(Booking, id=booking_id)
+
+    if request.method =='POST':
+        try:
+            booking.is_booked = False
+            booking.booker_user = None
+
             booking.save()
 
             messages.success(request, "Booking successful !")

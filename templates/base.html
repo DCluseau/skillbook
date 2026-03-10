@@ -26,7 +26,7 @@
                 {% if user.is_authenticated %}
                 <li><a href="{% url 'skillbook:slot_list' %}">Search for a service</a></li>
                 <li><a href="#">Skills list</a></li>
-                <li><a href="#">Manage profile</a></li>
+                <li><a href="{% url 'skillbook:my_bookings_list' %}">My bookings</a></li>
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-center">

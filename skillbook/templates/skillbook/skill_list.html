@@ -11,13 +11,9 @@
         <td>{{ skill.name }}</td>
         <td>
             {% if user.is_authenticated %}
-            <form method="post" action="{% url 'skillbook:add_my_skill' skill.id %}">
+            <form method="post" action="{% url 'skillbook:my_skill_list' %}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-success">Add to my skills</button>
-            </form>
-            <form method="post" action="{% url 'skillbook:remove_my_skill' skill.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Remove from my skills</button>
+                <button type="submit" class="btn btn-info">Manage my skills</button>
             </form>
             {% else %}
             Please login to add to your skills or remove from them

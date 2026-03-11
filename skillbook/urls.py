@@ -23,4 +23,6 @@ urlpatterns: List[URLPattern] = [
     path('my_services/', views.my_services, name='my_services'),
     path('propose_service/', views.propose_service, name='propose_service'),
     path('<int:booking_id>/delete_service/', views.delete_service, name='delete_service'),
+    path('<int:slot_id>/edit_service/', views.edit_service, name='edit_service'),
+    path('<int:slot_id>/edit_my_slot/', views.edit_my_slot, name='edit_my_slot'),
 ]

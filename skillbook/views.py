@@ -87,7 +87,7 @@ def cancel_booking(request: HttpRequest, booking_id: int) -> HttpResponse:
 @login_required
 def get_all_skills(request: HttpRequest) -> HttpResponse:
     user_skills = UserSkill.objects.filter(user = request.user)
-    skills = Skill.objects.exclude(pk__in=user_skills).order_by('name')
+    skills = Skill.objects.exclude(id__in=user_skills).order_by('name')
     return render(request, 'skillbook/skill_list.html', {'skills': skills, 'user_skills': user_skills})
 
 @login_required
@@ -216,6 +216,41 @@ def my_services(request: HttpRequest):
     slots = Slot.objects.filter(user_skill__in=user_skills)
     bookings = Booking.objects.filter(slot__in=slots)
     return render(request, 'skillbook/my_slots.html', {'bookings': bookings})
+
+@login_required
+def edit_my_slot(request: HttpRequest, slot_id):
+    slots = Slot.objects.filter(id=slot_id)
+    return render(request, 'skillbook/edit_my_slot.html', {'slots': slots})
+
+@login_required
+def edit_service(request: HttpRequest, slot_id: int):
+    slot = get_object_or_404(Slot, id=slot_id)
+    new_skill = get_object_or_404(Skill, id=request.POST["edit_skill"])
+    user_skill = get_object_or_404(UserSkill, skill=new_skill.id)
+
+    if request.method =='POST':
+        try:
+            slot.slot_date = request.POST["slot_date"]
+            slot.user_skill.id = user_skill.id
+
+            slot.save()
+
+            messages.success(request, "Skill added successfully !")
+        except Exception as e:
+            list_msg: list[str] = []
+
+            if isinstance(e, ValidationError):
+                if hasattr(e, 'message_dict') and e.message_dict:
+                    dict_err: dict[str, list[str]] = e.message_dict
+                    for msgs in dict_err.values():
+                        list_msg.extend(msgs)
+                elif hasattr(e, 'messages'):
+                    list_msg.extend(e.messages)
+            if list_msg:
+                messages.error(request, " | ".join(list_msg))
+            else:
+                messages.error(request, str(e))
+    return redirect('skillbook:skill_list')
 
 @login_required
 def delete_service(request: HttpRequest, booking_id: int):

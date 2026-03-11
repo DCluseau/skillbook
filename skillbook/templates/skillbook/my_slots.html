@@ -12,6 +12,10 @@
         <td>{{ booking.slot.user_skill.skill.name }}</td>
         <td>{{ booking.slot.slot_date }}
         <td>
+            <form method="post" action="{% url 'skillbook:edit_my_slot' booking.slot.id %}">
+                {% csrf_token %}
+                <button type="button" class="btn btn-warning">Edit service</button>
+            </form>
             <form method="post" action="{% url 'skillbook:delete_service' booking.id %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger">Delete service</button>

@@ -86,9 +86,35 @@ def cancel_booking(request: HttpRequest, booking_id: int) -> HttpResponse:
 
 @login_required
 def get_all_skills(request: HttpRequest) -> HttpResponse:
-    skills = Skill.objects.all()
-    return render(request, 'skillbook/skill_list.html', {'skills': skills})
+    skills = Skill.objects.all().order_by('name')
+    user_skills = UserSkill.objects.filter(user = request.user)
+    return render(request, 'skillbook/skill_list.html', {'skills': skills, 'user_skills': user_skills})
 
+@login_required
+def add_skill(request: HttpRequest) -> HttpResponse:
+
+    if request.method =='POST':
+        try:
+            new_skill = Skill(name=request.POST["name"])
+
+            new_skill.save()
+
+            messages.success(request, "Skill added successfully !")
+        except Exception as e:
+            list_msg: list[str] = []
+
+            if isinstance(e, ValidationError):
+                if hasattr(e, 'message_dict') and e.message_dict:
+                    dict_err: dict[str, list[str]] = e.message_dict
+                    for msgs in dict_err.values():
+                        list_msg.extend(msgs)
+                elif hasattr(e, 'messages'):
+                    list_msg.extend(e.messages)
+            if list_msg:
+                messages.error(request, " | ".join(list_msg))
+            else:
+                messages.error(request, str(e))
+    return redirect('skillbook:skill_list')
 
 @login_required
 def add_my_skill(request: HttpRequest, skill_id: int) -> HttpResponse:
@@ -100,7 +126,7 @@ def add_my_skill(request: HttpRequest, skill_id: int) -> HttpResponse:
 
             new_user_skill.save()
 
-            messages.success(request, "Booking successful !")
+            messages.success(request, "Skill added successfully !")
         except Exception as e:
             list_msg: list[str] = []
 

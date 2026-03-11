@@ -19,12 +19,6 @@
                 <button type="submit" class="btn btn-danger">Remove from my skills</button>
             </form>
         </td>
-        <td>
-            <form method="post" action="{% url 'skillbook:cancel_booking' booking.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Cancel booking</button>
-            </form>
-        </td>
     </tr>
     {% endfor %}
 </table>

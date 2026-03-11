@@ -88,3 +88,59 @@ def cancel_booking(request: HttpRequest, booking_id: int) -> HttpResponse:
 def get_all_skills(request: HttpRequest) -> HttpResponse:
     skills = Skill.objects.all()
     return render(request, 'skillbook/skill_list.html', {'skills': skills})
+
+
+@login_required
+def add_my_skill(request: HttpRequest, skill_id: int) -> HttpResponse:
+    skill = get_object_or_404(Skill, skill_id=skill_id)
+
+    if request.method =='POST':
+        try:
+            new_user_skill = UserSkill(user = request.user, skill = skill)
+
+            new_user_skill.save()
+
+            messages.success(request, "Booking successful !")
+        except Exception as e:
+            list_msg: list[str] = []
+
+            if isinstance(e, ValidationError):
+                if hasattr(e, 'message_dict') and e.message_dict:
+                    dict_err: dict[str, list[str]] = e.message_dict
+                    for msgs in dict_err.values():
+                        list_msg.extend(msgs)
+                elif hasattr(e, 'messages'):
+                    list_msg.extend(e.messages)
+            if list_msg:
+                messages.error(request, " | ".join(list_msg))
+            else:
+                messages.error(request, str(e))
+    return redirect('skillbook:skill_list')
+
+@login_required
+def remove_my_skill(request: HttpRequest, booking_id: int) -> HttpResponse:
+    booking = get_object_or_404(Booking, id=booking_id)
+
+    if request.method =='POST':
+        try:
+            booking.is_booked = False
+            booking.booker_user = request.user
+
+            booking.save()
+
+            messages.success(request, "Booking canceled")
+        except Exception as e:
+            list_msg: list[str] = []
+
+            if isinstance(e, ValidationError):
+                if hasattr(e, 'message_dict') and e.message_dict:
+                    dict_err: dict[str, list[str]] = e.message_dict
+                    for msgs in dict_err.values():
+                        list_msg.extend(msgs)
+                elif hasattr(e, 'messages'):
+                    list_msg.extend(e.messages)
+            if list_msg:
+                messages.error(request, " | ".join(list_msg))
+            else:
+                messages.error(request, str(e))
+    return redirect('skillbook:slot_list')

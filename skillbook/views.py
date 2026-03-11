@@ -19,7 +19,7 @@ def list_booked_slots(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def get_my_bookings(request: HttpRequest) -> HttpResponse:
-    user_bookings = Booking.objects.filter(booker_user=request.user)
+    user_bookings = Booking.objects.filter(booker_user=request.user, is_booked=True)
     return render(request, 'skillbook/my_bookings_list.html', {'bookings': user_bookings})
 
 @login_required
@@ -63,11 +63,11 @@ def cancel_booking(request: HttpRequest, booking_id: int) -> HttpResponse:
     if request.method =='POST':
         try:
             booking.is_booked = False
-            booking.booker_user = None
+            booking.booker_user = request.user
 
             booking.save()
 
-            messages.success(request, "Booking successful !")
+            messages.success(request, "Booking canceled")
         except Exception as e:
             list_msg: list[str] = []
 
@@ -83,3 +83,8 @@ def cancel_booking(request: HttpRequest, booking_id: int) -> HttpResponse:
             else:
                 messages.error(request, str(e))
     return redirect('skillbook:slot_list')
+
+@login_required
+def get_all_skills(request: HttpRequest) -> HttpResponse:
+    skills = Skill.objects.all()
+    return render(request, 'skillbook/skill_list.html', {'skills': skills})

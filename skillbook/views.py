@@ -209,3 +209,37 @@ def propose_service(request: HttpRequest):
             else:
                 messages.error(request, str(e))
     return redirect('skillbook:booked_list')
+
+@login_required
+def my_services(request: HttpRequest):
+    user_skills = UserSkill.objects.filter(user=request.user)
+    slots = Slot.objects.filter(user_skill__in=user_skills)
+    bookings = Booking.objects.filter(slot__in=slots)
+    return render(request, 'skillbook/my_slots.html', {'bookings': bookings})
+
+@login_required
+def delete_service(request: HttpRequest, booking_id: int):
+    if request.method =='POST':
+        try:
+            booking = get_object_or_404(Booking, id=booking_id)
+            slot = get_object_or_404(Slot, id=booking.slot.id)
+            
+            slot.delete()
+            booking.delete()
+
+            messages.success(request, "Service deleted successfully !")
+        except Exception as e:
+            list_msg: list[str] = []
+
+            if isinstance(e, ValidationError):
+                if hasattr(e, 'message_dict') and e.message_dict:
+                    dict_err: dict[str, list[str]] = e.message_dict
+                    for msgs in dict_err.values():
+                        list_msg.extend(msgs)
+                elif hasattr(e, 'messages'):
+                    list_msg.extend(e.messages)
+            if list_msg:
+                messages.error(request, " | ".join(list_msg))
+            else:
+                messages.error(request, str(e))
+    return redirect('skillbook:my_services')

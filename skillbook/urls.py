@@ -20,5 +20,7 @@ urlpatterns: List[URLPattern] = [
     path('<int:skill_id>/remove_my_skill/', views.remove_my_skill, name='remove_my_skill'),
     path('my_skill_list/', views.get_my_skills, name='my_skill_list'),
     path('add_slot/', views.add_slot, name='add_slot'),
+    path('my_services/', views.my_services, name='my_services'),
     path('propose_service/', views.propose_service, name='propose_service'),
+    path('<int:booking_id>/delete_service/', views.delete_service, name='delete_service'),
 ]

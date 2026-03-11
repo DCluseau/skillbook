@@ -10,6 +10,7 @@
     <tr>
         <td>{{ skill.name }}</td>
         <td>
+            {% if user.is_authenticated %}
             <form method="post" action="{% url 'skillbook:add_my_skill' skill.id %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-success">Add to my skills</button>
@@ -18,6 +19,9 @@
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger">Remove from my skills</button>
             </form>
+            {% else %}
+            Please login to add to your skills or remove from them
+            {% endif %}
         </td>
     </tr>
     {% endfor %}

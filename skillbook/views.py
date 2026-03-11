@@ -92,7 +92,7 @@ def get_all_skills(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def add_my_skill(request: HttpRequest, skill_id: int) -> HttpResponse:
-    skill = get_object_or_404(Skill, skill_id=skill_id)
+    skill = get_object_or_404(Skill, id=skill_id)
 
     if request.method =='POST':
         try:
@@ -118,17 +118,15 @@ def add_my_skill(request: HttpRequest, skill_id: int) -> HttpResponse:
     return redirect('skillbook:skill_list')
 
 @login_required
-def remove_my_skill(request: HttpRequest, booking_id: int) -> HttpResponse:
-    booking = get_object_or_404(Booking, id=booking_id)
+def remove_my_skill(request: HttpRequest, skill_id: int) -> HttpResponse:
+    skill = get_object_or_404(Skill, id=skill_id)
+    user_skill = get_object_or_404(UserSkill, skill = skill, user = request.user)
 
     if request.method =='POST':
         try:
-            booking.is_booked = False
-            booking.booker_user = request.user
+            user_skill.delete()
 
-            booking.save()
-
-            messages.success(request, "Booking canceled")
+            messages.success(request, "Skill remove from your list")
         except Exception as e:
             list_msg: list[str] = []
 
@@ -143,4 +141,9 @@ def remove_my_skill(request: HttpRequest, booking_id: int) -> HttpResponse:
                 messages.error(request, " | ".join(list_msg))
             else:
                 messages.error(request, str(e))
-    return redirect('skillbook:slot_list')
+    return redirect('skillbook:skill_list')
+
+@login_required
+def get_my_skills(request: HttpRequest) -> HttpResponse:
+    user_skills = UserSkill.objects.filter(user=request.user)
+    return render(request, 'skillbook/my_skill_list.html', {'user_skills': user_skills})

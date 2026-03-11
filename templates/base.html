@@ -25,6 +25,7 @@
                 <li><a href="{% url 'skillbook:booked_list' %}">Home</a></li>
                 {% if user.is_authenticated %}
                 <li><a href="{% url 'skillbook:slot_list' %}">Search for a service</a></li>
+                <li><a href="{% url 'skillbook:add_slot' %}">Propose a service</a></li>
                 <li><a href="{% url 'skillbook:skill_list' %}">Skills list</a></li>
                 <li><a href="{% url 'skillbook:my_bookings_list' %}">My bookings</a></li>
                 <li><a href="{% url 'skillbook:my_skill_list' %}">My skills list</a></li>

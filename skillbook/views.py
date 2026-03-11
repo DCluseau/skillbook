@@ -180,11 +180,12 @@ def add_slot(request: HttpRequest) -> HttpResponse:
     return render(request, 'skillbook/add_slot.html', {'user_skills': user_skills})
 
 @login_required
-def propose_service(request: HttpRequest, skill_id: int):
+def propose_service(request: HttpRequest):
     if request.method =='POST':
         try:
-            user_skill = get_object_or_404(Skill, skill_id = skill_id, user = request.user)
-            new_slot = Slot(user_skill,slot_date=request.POST["slot_date"])
+            skill = get_object_or_404(Skill, id = request.POST["proposed_skill"])
+            user_skill = get_object_or_404(UserSkill, skill=skill, user=request.user)
+            new_slot = Slot(user_skill=user_skill, slot_date=request.POST["slot_date"])
 
             new_slot.save()
 

@@ -189,6 +189,10 @@ def propose_service(request: HttpRequest):
 
             new_slot.save()
 
+            booking = Booking(slot=new_slot, booker_user=request.user, is_booked=False)
+
+            booking.save()
+
             messages.success(request, "Service added successfully !")
         except Exception as e:
             list_msg: list[str] = []

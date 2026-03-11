@@ -23,8 +23,8 @@ class UserSkill(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
     
-    # def __str__(self):
-    #     return f"{self.user.username} - {self.skill}"
+    def __str__(self):
+        return f"{self.user.username} - {self.skill}"
 
 class Slot(models.Model):
     user_skill = models.ForeignKey(UserSkill, on_delete=models.CASCADE)

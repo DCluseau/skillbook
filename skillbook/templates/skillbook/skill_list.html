@@ -8,6 +8,7 @@
     <input type="text" id="name" name="name" placeholder="Enter name">
     <input type="submit" class="btn btn-info">Submit</input>
 </form>
+<h2 class="h2">Available skills</h2>
 <table class="table table-striped table-bordered ">
     <tr>
         <th>Skill name</th>
@@ -22,7 +23,25 @@
                 {% csrf_token %}
                 <button type="submit" class="btn btn-success">Add to my skills</button>
             </form>
-            <form method="post" action="{% url 'skillbook:remove_my_skill' skill.id %}">
+            {% else %}
+            Please login to add to your skills or remove from them
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<h2 class="h2">My skills</h2>
+<table class="table table-striped table-bordered ">
+    <tr>
+        <th>Skill name</th>
+        <th>Action</th>
+    </tr>
+    {% for skill in user_skills%}
+    <tr>
+        <td>{{ skill.skill.name }}</td>
+        <td>
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'skillbook:remove_my_skill' skill.skill.id %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger">Remove from my skills</button>
             </form>

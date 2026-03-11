@@ -86,8 +86,8 @@ def cancel_booking(request: HttpRequest, booking_id: int) -> HttpResponse:
 
 @login_required
 def get_all_skills(request: HttpRequest) -> HttpResponse:
-    skills = Skill.objects.all().order_by('name')
     user_skills = UserSkill.objects.filter(user = request.user)
+    skills = Skill.objects.exclude(pk__in=user_skills).order_by('name')
     return render(request, 'skillbook/skill_list.html', {'skills': skills, 'user_skills': user_skills})
 
 @login_required
@@ -173,3 +173,34 @@ def remove_my_skill(request: HttpRequest, skill_id: int) -> HttpResponse:
 def get_my_skills(request: HttpRequest) -> HttpResponse:
     user_skills = UserSkill.objects.filter(user=request.user)
     return render(request, 'skillbook/my_skill_list.html', {'user_skills': user_skills})
+
+@login_required
+def add_slot(request: HttpRequest) -> HttpResponse:
+    user_skills = UserSkill.objects.filter(user=request.user)
+    return render(request, 'skillbook/add_slot.html', {'user_skills': user_skills})
+
+@login_required
+def propose_service(request: HttpRequest, skill_id: int):
+    if request.method =='POST':
+        try:
+            user_skill = get_object_or_404(Skill, skill_id = skill_id, user = request.user)
+            new_slot = Slot(user_skill,slot_date=request.POST["slot_date"])
+
+            new_slot.save()
+
+            messages.success(request, "Service added successfully !")
+        except Exception as e:
+            list_msg: list[str] = []
+
+            if isinstance(e, ValidationError):
+                if hasattr(e, 'message_dict') and e.message_dict:
+                    dict_err: dict[str, list[str]] = e.message_dict
+                    for msgs in dict_err.values():
+                        list_msg.extend(msgs)
+                elif hasattr(e, 'messages'):
+                    list_msg.extend(e.messages)
+            if list_msg:
+                messages.error(request, " | ".join(list_msg))
+            else:
+                messages.error(request, str(e))
+    return redirect('skillbook:booked_list')

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="h1">Propose a service</h1>
+<form action="{% url 'skillbook:propose_service' %}" method="POST">
+    {% csrf_token %}
+    <label for="slot_date">Date : </label>
+    <input type="date" id="slot_date" name="slot_date" required>
+    <label for="proposed_skill">Skill : </label>
+    <select id="proposed_skill" name="proposed_skill" required>
+        {% for user_skill in user_skills %}
+        <option value="{{ user_skill.skill.id }}">{{ user_skill.skill.name }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" class="btn btn-info">
+</form>
+{% endblock %}

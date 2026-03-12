@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="h1">My services</h1>
+<table class="table table-striped table-bordered ">
+    <tr>
+        <th>Skill</th>
+        <th>Slot</th>
+        <th>Action</th>
+    </tr>
+    {% for booking in bookings%}
+    <tr>
+        <td>{{ booking.slot.user_skill.skill.name }}</td>
+        <td>{{ booking.slot.slot_date }}
+        <td>
+            <form method="post" action="{% url 'skillbook:edit_my_slot' booking.slot.id %}">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-warning" value="Edit service">
+            </form>
+            <form method="post" action="{% url 'skillbook:delete_service' booking.id %}">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-danger" value="Delete service">
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="h1">Edit a service</h1>
+{% for slot in slots %}
+<form action="{% url 'skillbook:edit_service' slot.id %}" method="POST">
+    {% csrf_token %}
+    <label for="slot_date">Date : </label>
+    <input type="date" id="slot_date" name="slot_date" value="{{ slot.slot_date|date:"Y-m-d" }}" required>
+    <label for="edit_skill">Skill : </label>
+    <select id="edit_skill" name="edit_skill" required>
+        {% for user_skill in user_skills %}
+            <option value="{{ user_skill.skill.id }}" {% if slot.user_skill.skill.id == user_skill.skill.id %} selected {% endif %}>{{ user_skill.skill.name }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" class="btn btn-info">
+</form>
+{% endfor %}
+{% endblock %}

@@ -14,11 +14,11 @@
         <td>
             <form method="post" action="{% url 'skillbook:edit_my_slot' booking.slot.id %}">
                 {% csrf_token %}
-                <button type="button" class="btn btn-warning">Edit service</button>
+                <input type="submit" class="btn btn-warning" value="Edit service">
             </form>
             <form method="post" action="{% url 'skillbook:delete_service' booking.id %}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Delete service</button>
+                <input type="submit" class="btn btn-danger" value="Delete service">
             </form>
         </td>
     </tr>

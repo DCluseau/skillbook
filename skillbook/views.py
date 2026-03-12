@@ -220,7 +220,8 @@ def my_services(request: HttpRequest):
 @login_required
 def edit_my_slot(request: HttpRequest, slot_id):
     slots = Slot.objects.filter(id=slot_id)
-    return render(request, 'skillbook/edit_my_slot.html', {'slots': slots})
+    user_skills = UserSkill.objects.filter(user=request.user)
+    return render(request, 'skillbook/edit_my_slot.html', {'slots': slots, 'user_skills':user_skills})
 
 @login_required
 def edit_service(request: HttpRequest, slot_id: int):
@@ -231,7 +232,7 @@ def edit_service(request: HttpRequest, slot_id: int):
     if request.method =='POST':
         try:
             slot.slot_date = request.POST["slot_date"]
-            slot.user_skill.id = user_skill.id
+            slot.user_skill = user_skill
 
             slot.save()
 
@@ -250,7 +251,7 @@ def edit_service(request: HttpRequest, slot_id: int):
                 messages.error(request, " | ".join(list_msg))
             else:
                 messages.error(request, str(e))
-    return redirect('skillbook:skill_list')
+    return redirect('skillbook:my_services')
 
 @login_required
 def delete_service(request: HttpRequest, booking_id: int):

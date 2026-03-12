@@ -10,10 +10,10 @@
     </tr>
     {% for booking in bookings%}
     <tr>
-        <td>{{ booking.slot.user_skill.user.username }}</td>
+        <td>{% if user.is_authenticated %}{{ booking.slot.user_skill.user.username }}{% else %}Anonymous{% endif %}</td>
         <td>{{ booking.slot.user_skill.skill.name }}</td>
         <td>{{ booking.slot.slot_date }}</td>
-        <td>{{ booking.booker_user.username }}</td>
+        <td>{% if user.is_authenticated %}{{ booking.booker_user.username }}{% else %}Anonymous{% endif %}</td>
     </tr>
     {% endfor %}
 </table>

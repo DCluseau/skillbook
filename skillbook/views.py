@@ -208,7 +208,7 @@ def propose_service(request: HttpRequest):
                 messages.error(request, " | ".join(list_msg))
             else:
                 messages.error(request, str(e))
-    return redirect('skillbook:booked_list')
+    return redirect('skillbook:my_services')
 
 @login_required
 def my_services(request: HttpRequest):
